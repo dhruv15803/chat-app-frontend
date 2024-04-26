@@ -5,6 +5,7 @@ import Register from "./Pages/Register"
 import { User } from "./types";
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import Home from "./Pages/Home";
 export const backendUrl="http://localhost:5000";
 export const GlobalContext = createContext(null);
 
@@ -44,7 +45,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout/>}>
-          <Route index element={<>Home</>}/>
+          <Route index element={isLoggedIn ? <Home/> : <Login/>}/>
           <Route path="login" element={isLoggedIn ? <Navigate to='/'/> : <Login/>}/>
           <Route path="register" element={isLoggedIn ? <Navigate to='/'/> : <Register/>}/>
         </Route>

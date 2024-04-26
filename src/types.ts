@@ -18,3 +18,11 @@ export type GlobalContextType = {
     setIsLoggedIn:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+export type message = {
+    _id:string;
+    senderId:string;
+    receiverId:string;
+    message:string;
+    createdAt:string;
+    updatedAt:string;
+}
