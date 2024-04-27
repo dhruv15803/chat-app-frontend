@@ -1,7 +1,8 @@
 import { User } from "@/types";
-import React from "react";
+import React, { useState } from "react";
 import UserCard from "./UserCard";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 type LeftSideBarProps = {
   users: User[];
@@ -14,12 +15,30 @@ const LeftSideBar = ({
   selectedUser,
   setSelectedUser,
 }: LeftSideBarProps) => {
+
+  const [searchUsername,setSearchUsername] = useState<string>("");
+
+  const searchUser = (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if(searchUsername.trim()==="") {
+      toast.error("Please enter the required field");
+      return;
+    }
+    const user = users.find((user) => user.username===searchUsername.trim().toLowerCase());
+    if(!user) {
+      toast.error("User not found");
+      return;
+    }
+    setSelectedUser(user!);
+  }
   return (
     <>
       <div className="border-2 w-[30%] flex flex-col">
         <div className="mt-4 border-b-2 flex items-center justify-center p-4">
-          <form className="flex items-center gap-2">
+          <form onSubmit={(e) => searchUser(e)} className="flex items-center gap-2">
             <input
+              value={searchUsername}
+              onChange={(e) => setSearchUsername(e.target.value)}
               className="border-2 rounded-lg p-2"
               type="text"
               name="searchUsername"
@@ -38,7 +57,7 @@ const LeftSideBar = ({
           return (
             <UserCard
               key={user._id}
-              selectedUser={selectedUser}
+              selectedUser={selectedUser!}
               setSelectedUser={setSelectedUser}
               user={user}
             />

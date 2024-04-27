@@ -1,8 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { GlobalContextType, User, message } from "@/types";
 import axios from "axios";
 import { GlobalContext, backendUrl } from "@/App";
+import { RxAvatar } from "react-icons/rx";
+import { IoIosArrowDown } from "react-icons/io";
+import MyChatCard from "./MyChatCard";
+import UserChatCard from "./UserChatCard";
 
 type RightChatSectionProps = {
   selectedUser: User | null;
@@ -14,6 +18,7 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
   const { loggedInUser }: GlobalContextType = useContext(GlobalContext);
   const [noMessagesMsg, setNoMessagesMsg] = useState<string>("");
   const [isIntitialFetch, setIsInitialFetch] = useState<boolean>(true);
+  const messageRef = useRef<HTMLDivElement>();
 
   const getConversation = async () => {
     try {
@@ -63,6 +68,58 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
     }
   };
 
+  const deleteMessage = async (messageId:string) => {
+    try {
+      const response = await axios.delete(`${backendUrl}/api/message/deleteMessage/${selectedUser?._id}/${messageId}`,{
+        withCredentials:true,
+      });
+      console.log(response);
+      const newMessages = messages.filter((message) => message._id!==messageId);
+      setMessages(newMessages);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const editMessage = async (messageId:string,newMessage:string) => {
+    try {
+      if(newMessage.trim()==="") return;
+
+      const response = await axios.put(`${backendUrl}/api/message/editMessage`,{
+        messageId,
+        newMessage,
+        "receiverId":selectedUser?._id,
+      },{withCredentials:true});
+      console.log(response);
+      const newMessages = messages?.map((message) => {
+        if(message._id===messageId) {
+          return {
+            ...message,
+            "message":newMessage,
+          }
+        } else {
+          return message;
+        }
+      })
+      setMessages(newMessages);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  function convertTo24HourFormat(timestamp: string) {
+    const date = new Date(timestamp);
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const formattedHours = hours < 10 ? "0" + hours : hours;
+    const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+
+    return `${formattedHours}:${formattedMinutes}`;
+  }
+
   console.log(messages);
 
   useEffect(() => {
@@ -95,22 +152,28 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
         <div className="flex items-center text-xl font-semibold p-2 border-b-2">
           {selectedUser.username}
         </div>
-        <div className="flex flex-col gap-4 h-[85%] border-2">
-            {messages?.map((message) => {
-                if(message.senderId===loggedInUser._id) {
-                    return <div key={message._id} className="flex justify-end">
-                    <div className="flex flex-wrap w-fit p-1 border-2 border-red-500">
-                      {message.message}
-                    </div>
-                  </div>
-                } else {
-                    return <div key={message._id} className="flex">
-                    <div className="flex flex-wrap w-fit p-1 border-2 border-blue-500">
-                      {message.message}
-                    </div>
-                  </div>
-                }
-            })}
+        <div className="flex flex-col gap-4 h-[85%] p-2 border-2 overflow-y-auto">
+          {messages?.map((message) => {
+            if (message.senderId === loggedInUser._id) {
+              return (
+                <MyChatCard
+                  deleteMessage={deleteMessage}
+                  editMessage={editMessage}
+                  key={message._id}
+                  message={message}
+                  convertTo24HourFormat={convertTo24HourFormat}
+                />
+              );
+            } else {
+              return (
+                <UserChatCard
+                  key={message._id}
+                  message={message}
+                  convertTo24HourFormat={convertTo24HourFormat}
+                />
+              );
+            }
+          })}
         </div>
         <form
           onSubmit={(e) => sendMessage(e)}
