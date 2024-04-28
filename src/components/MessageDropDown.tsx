@@ -1,64 +1,77 @@
-import React, { SetStateAction } from 'react'
+import React, { SetStateAction } from "react";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-  } from "./ui/dropdown-menu";
-import { Separator } from './ui/separator';
-import { Button } from './ui/button';
-import { message } from '@/types';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Separator } from "./ui/separator";
+import { Button } from "./ui/button";
+import { User, message } from "@/types";
+import { Sheet, SheetTrigger } from "./ui/sheet";
+import ForwardMessageSheet from "./ForwardMessageSheet";
 
 type MessageDropDownProps = {
-    setIsShowDropdown:React.Dispatch<React.SetStateAction<boolean>>;
-    deleteMessage:(messageId:string) => Promise<void>;
-    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setNewMessage:React.Dispatch<React.SetStateAction<string>>;
-    message:message;
-}
+  setIsShowDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+  deleteMessage: (messageId: string) => Promise<void>;
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewMessage: React.Dispatch<React.SetStateAction<string>>;
+  message: message;
+  forwardMessage:(message:message,selectForwardUser:User) => Promise<void>;
+};
 
 const MessageDropDown = ({
-    setIsShowDropdown,
-    deleteMessage,
-    setIsDialogOpen,
-    setNewMessage,
-    message,
-}:MessageDropDownProps) => {
+  setIsShowDropdown,
+  deleteMessage,
+  setIsDialogOpen,
+  setNewMessage,
+  message,
+  forwardMessage,
+}: MessageDropDownProps) => {
   return (
     <>
-    <div className='flex flex-col gap-2 border-2 rounded-lg p-2 w-[25%]'>
-            <div className='p-1 font-semibold'>Message</div>
-            <Separator/>
-            <div className='flex'><Button className='w-full' onClick={async () => {
-                await deleteMessage(message._id)
-                setIsShowDropdown(false);
-                }} variant="ghost">Delete</Button></div>
-            <div className='flex'><Button className='w-full' variant="ghost" onClick={async () => {
-                setIsDialogOpen(true);
-                setNewMessage(message.message)
-            }}>Edit</Button></div>
-            <div className='flex'><Button className='w-full' variant="ghost">Forward</Button></div>
-    </div>
+      <div className="flex flex-col gap-2 border-2 rounded-lg p-2 w-[25%]">
+        <div className="p-1 font-semibold">Message</div>
+        <Separator />
+        <div className="flex">
+          <Button
+            className="w-full"
+            onClick={async () => {
+              await deleteMessage(message._id);
+              setIsShowDropdown(false);
+            }}
+            variant="ghost"
+          >
+            Delete
+          </Button>
+        </div>
+        <div className="flex">
+          <Button
+            className="w-full"
+            variant="ghost"
+            onClick={async () => {
+              setIsDialogOpen(true);
+              setNewMessage(message.message);
+            }}
+          >
+            Edit
+          </Button>
+        </div>
+        <div className="flex">
+          <Sheet>
+            <SheetTrigger className="w-full">
+              <Button className="w-full" variant="ghost">
+                Forward
+              </Button>
+            </SheetTrigger>
+            <ForwardMessageSheet forwardMessage={forwardMessage}  message={message}/>
+          </Sheet>
+        </div>
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default MessageDropDown
-
-{/* <DropdownMenu>
-<DropdownMenuContent>
-    <DropdownMenuLabel>Message</DropdownMenuLabel>
-    <DropdownMenuSeparator/>
-    <DropdownMenuItem><Button onClick={async () => {
-        await deleteMessage(message._id)
-        setIsShowDropdown(false);
-        }} variant="ghost">Delete</Button></DropdownMenuItem>
-    <DropdownMenuItem><Button variant="ghost" onClick={async () => {
-        setIsDialogOpen(true);
-        setNewMessage(message.message)
-    }}>Edit</Button></DropdownMenuItem>
-    <DropdownMenuItem>Forward</DropdownMenuItem>
-</DropdownMenuContent>
-</DropdownMenu> */}
+export default MessageDropDown;

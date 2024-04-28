@@ -34,7 +34,7 @@ const Home = () => {
           setSelectedUser={setSelectedUser}
           users={users}
         />
-        <RightChatSection selectedUser={selectedUser}/>
+        <RightChatSection selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
       </div>
     </>
   );

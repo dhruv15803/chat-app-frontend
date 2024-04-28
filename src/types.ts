@@ -25,4 +25,5 @@ export type message = {
     message:string;
     createdAt:string;
     updatedAt:string;
+    isForwarded:boolean;
 }

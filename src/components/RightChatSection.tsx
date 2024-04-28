@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { SetStateAction, useContext, useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { GlobalContextType, User, message } from "@/types";
 import axios from "axios";
@@ -13,9 +13,10 @@ import SearchMessageSheet from "./SearchMessageSheet";
 
 type RightChatSectionProps = {
   selectedUser: User | null;
+  setSelectedUser:React.Dispatch<SetStateAction<User | null>>;
 };
 
-const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
+const RightChatSection = ({ selectedUser,setSelectedUser }: RightChatSectionProps) => {
   const [messages, setMessages] = useState<message[]>([]);
   const [message, setMessage] = useState<string>("");
   const { loggedInUser }: GlobalContextType = useContext(GlobalContext);
@@ -122,6 +123,22 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
     }
   };
 
+  const forwardMessage = async (message:message,selectForwardUser:User) => {
+    try {
+      if(message.message.trim()==="") {
+        return;
+      }
+      const response = await axios.post(`${backendUrl}/api/message/forward`,{
+        "message":message.message,
+        "receiverId":selectForwardUser._id,
+      },{withCredentials:true});
+      console.log(response);
+      setSelectedUser(selectForwardUser);
+    } catch (error) {
+      console.log(error);
+    }
+  } 
+
   function convertTo24HourFormat(timestamp: string) {
     const date = new Date(timestamp);
 
@@ -200,7 +217,8 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
             if (message.senderId === loggedInUser._id) {
               return (
                 <MyChatCard
-                latestMessageRef={latestMessageRef}
+                  forwardMessage={forwardMessage}
+                  latestMessageRef={latestMessageRef}
                   searchedMessageId={searchedMessageId}
                   searchedMessageRef={searchedMessageRef}
                   deleteMessage={deleteMessage}
@@ -213,6 +231,7 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
             } else {
               return (
                 <UserChatCard
+                  isForwarded={message.isForwarded}
                   searchedMessageId={searchedMessageId}
                   searchedMessageRef={searchedMessageRef}
                   key={message._id}

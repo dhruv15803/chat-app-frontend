@@ -1,4 +1,4 @@
-import { message } from "@/types";
+import { User, message } from "@/types";
 import { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
@@ -15,6 +15,7 @@ type MyChatCardProps = {
   searchedMessageRef:React.RefObject<HTMLDivElement>;
   searchedMessageId:string;
   latestMessageRef:React.RefObject<HTMLDivElement>;
+  forwardMessage:(message:message,selectForwardUser:User) => Promise<void>;
 };
 
 const MyChatCard = ({
@@ -24,7 +25,8 @@ const MyChatCard = ({
   editMessage,
   searchedMessageRef,
   searchedMessageId,
-  latestMessageRef
+  latestMessageRef,
+  forwardMessage,
 }: MyChatCardProps) => {
   const [isArrowShow, setIsArrowShow] = useState<boolean>(false);
   const [isShowDropdown, setIsShowDropdown] = useState<boolean>(false);
@@ -66,6 +68,7 @@ const MyChatCard = ({
         {isShowDropdown && (
             <div className="flex justify-end">
             <MessageDropDown 
+            forwardMessage={forwardMessage}
             deleteMessage={deleteMessage} 
             setIsShowDropdown={setIsShowDropdown} 
             message={message}
