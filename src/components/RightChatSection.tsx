@@ -172,7 +172,7 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
         <div className="flex items-center text-xl font-semibold p-2 border-b-2 justify-between">
           {selectedUser.username}
           <Sheet>
-            <SheetTrigger>
+            <SheetTrigger className="text-2xl">
               <CiSearch />
             </SheetTrigger>
             <SearchMessageSheet

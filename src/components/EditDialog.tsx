@@ -26,7 +26,7 @@ const EditDialog = ({
     <>
     <AlertDialog open={isDialogOpen}>
         <AlertDialogContent>
-            <AlertDialogHeader>
+            <AlertDialogHeader className='text-xl font-semibold'>
                 Edit message
             </AlertDialogHeader>
             <textarea value={newMessage} onChange={(e) => setNewMessage(e.target.value)} className="p-2 border-2 rounded-lg" />
