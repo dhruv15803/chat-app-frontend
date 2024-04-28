@@ -7,6 +7,9 @@ import { RxAvatar } from "react-icons/rx";
 import { IoIosArrowDown } from "react-icons/io";
 import MyChatCard from "./MyChatCard";
 import UserChatCard from "./UserChatCard";
+import { CiSearch } from "react-icons/ci";
+import { Sheet, SheetTrigger } from "./ui/sheet";
+import SearchMessageSheet from "./SearchMessageSheet";
 
 type RightChatSectionProps = {
   selectedUser: User | null;
@@ -17,8 +20,8 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
   const [message, setMessage] = useState<string>("");
   const { loggedInUser }: GlobalContextType = useContext(GlobalContext);
   const [noMessagesMsg, setNoMessagesMsg] = useState<string>("");
-  const [isIntitialFetch, setIsInitialFetch] = useState<boolean>(true);
-  const messageRef = useRef<HTMLDivElement>();
+  const searchedMessageRef = useRef<HTMLDivElement>(null);
+  const [searchedMessageId, setSearchedMessageId] = useState<string>("");
 
   const getConversation = async () => {
     try {
@@ -68,45 +71,53 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
     }
   };
 
-  const deleteMessage = async (messageId:string) => {
+  const deleteMessage = async (messageId: string) => {
     try {
-      const response = await axios.delete(`${backendUrl}/api/message/deleteMessage/${selectedUser?._id}/${messageId}`,{
-        withCredentials:true,
-      });
+      const response = await axios.delete(
+        `${backendUrl}/api/message/deleteMessage/${selectedUser?._id}/${messageId}`,
+        {
+          withCredentials: true,
+        }
+      );
       console.log(response);
-      const newMessages = messages.filter((message) => message._id!==messageId);
+      const newMessages = messages.filter(
+        (message) => message._id !== messageId
+      );
       setMessages(newMessages);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  const editMessage = async (messageId:string,newMessage:string) => {
+  const editMessage = async (messageId: string, newMessage: string) => {
     try {
-      if(newMessage.trim()==="") return;
+      if (newMessage.trim() === "") return;
 
-      const response = await axios.put(`${backendUrl}/api/message/editMessage`,{
-        messageId,
-        newMessage,
-        "receiverId":selectedUser?._id,
-      },{withCredentials:true});
+      const response = await axios.put(
+        `${backendUrl}/api/message/editMessage`,
+        {
+          messageId,
+          newMessage,
+          receiverId: selectedUser?._id,
+        },
+        { withCredentials: true }
+      );
       console.log(response);
       const newMessages = messages?.map((message) => {
-        if(message._id===messageId) {
+        if (message._id === messageId) {
           return {
             ...message,
-            "message":newMessage,
-          }
+            message: newMessage,
+          };
         } else {
           return message;
         }
-      })
+      });
       setMessages(newMessages);
     } catch (error) {
       console.log(error);
     }
-  }
-
+  };
 
   function convertTo24HourFormat(timestamp: string) {
     const date = new Date(timestamp);
@@ -120,7 +131,12 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
     return `${formattedHours}:${formattedMinutes}`;
   }
 
-  console.log(messages);
+  const goToSearchedMessage = (id: string) => {
+    setSearchedMessageId(id);
+    if (searchedMessageRef.current) {
+      searchedMessageRef.current.scrollIntoView({behavior:"smooth"})
+    }
+  };
 
   useEffect(() => {
     getConversation();
@@ -149,14 +165,26 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
   return (
     <>
       <div className="border-2 w-[70%] flex flex-col">
-        <div className="flex items-center text-xl font-semibold p-2 border-b-2">
+        <div className="flex items-center text-xl font-semibold p-2 border-b-2 justify-between">
           {selectedUser.username}
+          <Sheet>
+            <SheetTrigger>
+              <CiSearch />
+            </SheetTrigger>
+            <SearchMessageSheet
+              goToSearchedMessage={goToSearchedMessage}
+              selectedUser={selectedUser}
+              messages={messages}
+            />
+          </Sheet>
         </div>
         <div className="flex flex-col gap-4 h-[85%] p-2 border-2 overflow-y-auto">
           {messages?.map((message) => {
             if (message.senderId === loggedInUser._id) {
               return (
                 <MyChatCard
+                  searchedMessageId={searchedMessageId}
+                  searchedMessageRef={searchedMessageRef}
                   deleteMessage={deleteMessage}
                   editMessage={editMessage}
                   key={message._id}
@@ -167,6 +195,8 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
             } else {
               return (
                 <UserChatCard
+                  searchedMessageId={searchedMessageId}
+                  searchedMessageRef={searchedMessageRef}
                   key={message._id}
                   message={message}
                   convertTo24HourFormat={convertTo24HourFormat}

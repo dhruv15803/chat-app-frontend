@@ -33,7 +33,7 @@ const LeftSideBar = ({
   }
   return (
     <>
-      <div className="border-2 w-[30%] flex flex-col">
+      <div className="border-2 w-[30%] flex flex-col overflow-y-auto">
         <div className="mt-4 border-b-2 flex items-center justify-center p-4">
           <form onSubmit={(e) => searchUser(e)} className="flex items-center gap-2">
             <input

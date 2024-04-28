@@ -12,6 +12,8 @@ type MyChatCardProps = {
   convertTo24HourFormat: (timestamp: string) => string;
   deleteMessage: (messageId: string) => Promise<void>;
   editMessage: (messageId: string, newMessage: string) => Promise<void>;
+  searchedMessageRef:React.RefObject<HTMLDivElement>;
+  searchedMessageId:string;
 };
 
 const MyChatCard = ({
@@ -19,6 +21,8 @@ const MyChatCard = ({
   convertTo24HourFormat,
   deleteMessage,
   editMessage,
+  searchedMessageRef,
+  searchedMessageId,
 }: MyChatCardProps) => {
   const [isArrowShow, setIsArrowShow] = useState<boolean>(false);
   const [isShowDropdown, setIsShowDropdown] = useState<boolean>(false);
@@ -36,7 +40,7 @@ const MyChatCard = ({
         setNewMessage={setNewMessage}
         setIsShowDropdown={setIsShowDropdown}
       />
-      <div className="flex flex-col gap-1">
+      <div ref={searchedMessageId===message._id ? searchedMessageRef : null} className="flex flex-col gap-1">
         <div className="flex justify-end">
           <div className="flex w-[60%] justify-end">
             <div
