@@ -131,12 +131,16 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
     return `${formattedHours}:${formattedMinutes}`;
   }
 
-  const goToSearchedMessage = (id: string) => {
-    setSearchedMessageId(id);
-    if (searchedMessageRef.current) {
-      searchedMessageRef.current.scrollIntoView({behavior:"smooth"})
+  const goToSearchedMessage = (id: string) => setSearchedMessageId(id);
+
+  useEffect(() => {
+    const scrollToMessage = () => {
+      if (searchedMessageRef.current) {
+        searchedMessageRef.current.scrollIntoView({behavior:"smooth"})
+      }
     }
-  };
+    scrollToMessage();
+  },[searchedMessageId])
 
   useEffect(() => {
     getConversation();
