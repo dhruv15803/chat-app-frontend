@@ -14,6 +14,7 @@ type MyChatCardProps = {
   editMessage: (messageId: string, newMessage: string) => Promise<void>;
   searchedMessageRef:React.RefObject<HTMLDivElement>;
   searchedMessageId:string;
+  latestMessageRef:React.RefObject<HTMLDivElement>;
 };
 
 const MyChatCard = ({
@@ -23,6 +24,7 @@ const MyChatCard = ({
   editMessage,
   searchedMessageRef,
   searchedMessageId,
+  latestMessageRef
 }: MyChatCardProps) => {
   const [isArrowShow, setIsArrowShow] = useState<boolean>(false);
   const [isShowDropdown, setIsShowDropdown] = useState<boolean>(false);
@@ -73,6 +75,7 @@ const MyChatCard = ({
             </div>
         )}
       </div>
+      <div ref={latestMessageRef}></div>
     </>
   );
 };

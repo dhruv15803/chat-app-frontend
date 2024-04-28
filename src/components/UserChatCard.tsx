@@ -13,7 +13,6 @@ const UserChatCard = ({
   convertTo24HourFormat,
   searchedMessageId,
   searchedMessageRef,
-
 }:UserChatCardProps) => {
   return (
     <>

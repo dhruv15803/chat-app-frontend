@@ -22,6 +22,8 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
   const [noMessagesMsg, setNoMessagesMsg] = useState<string>("");
   const searchedMessageRef = useRef<HTMLDivElement>(null);
   const [searchedMessageId, setSearchedMessageId] = useState<string>("");
+  const latestMessageRef = useRef<HTMLDivElement>(null);
+  const previousMessagesLength = useRef(0);
 
   const getConversation = async () => {
     try {
@@ -93,6 +95,7 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
     try {
       if (newMessage.trim() === "") return;
 
+      
       const response = await axios.put(
         `${backendUrl}/api/message/editMessage`,
         {
@@ -143,6 +146,16 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
   },[searchedMessageId])
 
   useEffect(() => {
+    const scrollToLatestMessage = () => {
+      if(latestMessageRef.current && messages.length > previousMessagesLength.current) {
+        latestMessageRef.current.scrollIntoView({behavior:'smooth'})
+      }
+    }
+    scrollToLatestMessage();
+    previousMessagesLength.current = messages.length;
+  },[messages])
+
+  useEffect(() => {
     getConversation();
 
     const intervalId = setInterval(() => {
@@ -187,6 +200,7 @@ const RightChatSection = ({ selectedUser }: RightChatSectionProps) => {
             if (message.senderId === loggedInUser._id) {
               return (
                 <MyChatCard
+                latestMessageRef={latestMessageRef}
                   searchedMessageId={searchedMessageId}
                   searchedMessageRef={searchedMessageRef}
                   deleteMessage={deleteMessage}
