@@ -6,6 +6,7 @@ import { User } from "./types";
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import Home from "./Pages/Home";
+import Loader from "./components/Loader";
 export const backendUrl="http://localhost:5000";
 export const GlobalContext = createContext(null);
 
@@ -13,10 +14,12 @@ export const GlobalContext = createContext(null);
 function App() {
   const [loggedInUser,setLoggedInUser] = useState<User | {}>({});
   const [isLoggedIn,setIsLoggedIn] = useState<boolean>(false);
+  const [isLoading,setIsLoading] = useState<boolean>(false);
 
   const getLoggedInUser = async () => {
     try {
       if(isLoggedIn) return;
+      setIsLoading(true);
       const response = await axios.get(`${backendUrl}/api/user/getLoggedInUser`,{
         withCredentials:true,
       });
@@ -27,12 +30,25 @@ function App() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   } 
 
   useEffect(() => {
     getLoggedInUser();
   },[])
+
+  if(isLoading) {
+    return (
+      <>
+      <div className="flex justify-center items-center my-24 gap-2">
+        <Loader height="90" width="90"/>
+        Loading...
+      </div>
+      </>
+    )
+  }
 
   return (
     <>
