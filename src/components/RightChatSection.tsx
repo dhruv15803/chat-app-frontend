@@ -1,4 +1,10 @@
-import React, { SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  SetStateAction,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Button } from "./ui/button";
 import { GlobalContextType, User, message } from "@/types";
 import axios from "axios";
@@ -10,13 +16,24 @@ import UserChatCard from "./UserChatCard";
 import { CiSearch } from "react-icons/ci";
 import { Sheet, SheetTrigger } from "./ui/sheet";
 import SearchMessageSheet from "./SearchMessageSheet";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "./ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 
 type RightChatSectionProps = {
   selectedUser: User | null;
-  setSelectedUser:React.Dispatch<SetStateAction<User | null>>;
+  setSelectedUser: React.Dispatch<SetStateAction<User | null>>;
 };
 
-const RightChatSection = ({ selectedUser,setSelectedUser }: RightChatSectionProps) => {
+const RightChatSection = ({
+  selectedUser,
+  setSelectedUser,
+}: RightChatSectionProps) => {
   const [messages, setMessages] = useState<message[]>([]);
   const [message, setMessage] = useState<string>("");
   const { loggedInUser }: GlobalContextType = useContext(GlobalContext);
@@ -96,7 +113,6 @@ const RightChatSection = ({ selectedUser,setSelectedUser }: RightChatSectionProp
     try {
       if (newMessage.trim() === "") return;
 
-      
       const response = await axios.put(
         `${backendUrl}/api/message/editMessage`,
         {
@@ -123,21 +139,36 @@ const RightChatSection = ({ selectedUser,setSelectedUser }: RightChatSectionProp
     }
   };
 
-  const forwardMessage = async (message:message,selectForwardUser:User) => {
+  const forwardMessage = async (message: message, selectForwardUser: User) => {
     try {
-      if(message.message.trim()==="") {
+      if (message.message.trim() === "") {
         return;
       }
-      const response = await axios.post(`${backendUrl}/api/message/forward`,{
-        "message":message.message,
-        "receiverId":selectForwardUser._id,
-      },{withCredentials:true});
+      const response = await axios.post(
+        `${backendUrl}/api/message/forward`,
+        {
+          message: message.message,
+          receiverId: selectForwardUser._id,
+        },
+        { withCredentials: true }
+      );
       console.log(response);
       setSelectedUser(selectForwardUser);
     } catch (error) {
       console.log(error);
     }
-  } 
+  };
+
+  const clearChat = async () => {
+    try {
+      const response = await axios.delete(`${backendUrl}/api/message/clearChat/${selectedUser?._id}`,{
+        withCredentials:true,
+      })
+      setMessages([]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   function convertTo24HourFormat(timestamp: string) {
     const date = new Date(timestamp);
@@ -156,21 +187,24 @@ const RightChatSection = ({ selectedUser,setSelectedUser }: RightChatSectionProp
   useEffect(() => {
     const scrollToMessage = () => {
       if (searchedMessageRef.current) {
-        searchedMessageRef.current.scrollIntoView({behavior:"smooth"})
+        searchedMessageRef.current.scrollIntoView({ behavior: "smooth" });
       }
-    }
+    };
     scrollToMessage();
-  },[searchedMessageId])
+  }, [searchedMessageId]);
 
   useEffect(() => {
     const scrollToLatestMessage = () => {
-      if(latestMessageRef.current && messages.length > previousMessagesLength.current) {
-        latestMessageRef.current.scrollIntoView({behavior:'smooth'})
+      if (
+        latestMessageRef.current &&
+        messages.length > previousMessagesLength.current
+      ) {
+        latestMessageRef.current.scrollIntoView({ behavior: "smooth" });
       }
-    }
+    };
     scrollToLatestMessage();
     previousMessagesLength.current = messages.length;
-  },[messages])
+  }, [messages]);
 
   useEffect(() => {
     getConversation();
@@ -201,16 +235,29 @@ const RightChatSection = ({ selectedUser,setSelectedUser }: RightChatSectionProp
       <div className="border-2 w-[70%] flex flex-col">
         <div className="flex items-center text-xl font-semibold p-2 border-b-2 justify-between">
           {selectedUser.username}
-          <Sheet>
-            <SheetTrigger className="text-2xl">
-              <CiSearch />
-            </SheetTrigger>
-            <SearchMessageSheet
-              goToSearchedMessage={goToSearchedMessage}
-              selectedUser={selectedUser}
-              messages={messages}
-            />
-          </Sheet>
+          <div className="flex items-center gap-4">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                {" "}
+                <BsThreeDotsVertical />
+              </DropdownMenuTrigger>
+              <DropdownMenuSeparator />
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setSelectedUser(null)}>Close chat</DropdownMenuItem>
+                <DropdownMenuItem onClick={clearChat}>Clear chat</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Sheet>
+              <SheetTrigger className="text-2xl">
+                <CiSearch />
+              </SheetTrigger>
+              <SearchMessageSheet
+                goToSearchedMessage={goToSearchedMessage}
+                selectedUser={selectedUser}
+                messages={messages}
+              />
+            </Sheet>
+          </div>
         </div>
         <div className="flex flex-col gap-4 h-[85%] p-2 border-2 overflow-y-auto">
           {messages?.map((message) => {
