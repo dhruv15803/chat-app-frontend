@@ -232,7 +232,7 @@ const RightChatSection = ({
 
   return (
     <>
-      <div className="border-2 w-[70%] flex flex-col">
+      <div className="border-2 w-[60%] md:w-[70%] flex flex-col">
         <div className="flex items-center text-xl font-semibold p-2 border-b-2 justify-between">
           {selectedUser.username}
           <div className="flex items-center gap-4">
@@ -292,12 +292,12 @@ const RightChatSection = ({
         </div>
         <form
           onSubmit={(e) => sendMessage(e)}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 p-2"
         >
           <input
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="border-2 rounded-lg p-2 w-[70%]"
+            className="border-2 rounded-lg p-2 w-[85%]"
             type="text"
             name="message"
             id="message"

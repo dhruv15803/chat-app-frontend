@@ -28,7 +28,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="border-2 rounded-lg w-[80%] shadow-lg mx-auto my-16 flex h-[700px]">
+      <div className="border-2 rounded-lg w-[90%] shadow-lg mx-auto my-16 flex h-[700px]">
         <LeftSideBar
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
