@@ -231,6 +231,7 @@ const RightChatSection = ({ selectedUser,setSelectedUser }: RightChatSectionProp
             } else {
               return (
                 <UserChatCard
+                  forwardMessage={forwardMessage}
                   isForwarded={message.isForwarded}
                   searchedMessageId={searchedMessageId}
                   searchedMessageRef={searchedMessageRef}
