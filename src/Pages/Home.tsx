@@ -1,14 +1,16 @@
 import { GlobalContext, backendUrl } from "@/App";
 import LeftSideBar from "@/components/LeftSideBar";
 import RightChatSection from "@/components/RightChatSection";
-import { GlobalContextType, User } from "@/types";
+import { GlobalContextType, Group, User } from "@/types";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 
 const Home = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const { loggedInUser }: GlobalContextType = useContext(GlobalContext);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
   const getAllUsers = async () => {
     try {
@@ -22,8 +24,25 @@ const Home = () => {
     }
   };
 
+  // gets all groups that logged in user is a part of
+  const getMyGroups = async () => {
+    try {
+      const response = await axios.get(`${backendUrl}/api/group/getMyGroups`, {
+        withCredentials: true,
+      });
+      if (response.data.success) {
+        setGroups(response.data.groups);
+      } else {
+        setGroups([]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getAllUsers();
+    getMyGroups();
   }, []);
 
   return (
@@ -33,8 +52,16 @@ const Home = () => {
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
           users={users}
+          groups={groups}
+          selectedGroup={selectedGroup}
+          setSelectedGroup={setSelectedGroup}
         />
-        <RightChatSection selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+        <RightChatSection
+          selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser}
+          selectedGroup={selectedGroup}
+          setSelectedGroup={setSelectedGroup}
+        />
       </div>
     </>
   );

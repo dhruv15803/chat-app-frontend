@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { Button } from "./ui/button";
-import { GlobalContextType, User, message } from "@/types";
+import { GlobalContextType, Group, User, message } from "@/types";
 import axios from "axios";
 import { GlobalContext, backendUrl } from "@/App";
 import { RxAvatar } from "react-icons/rx";
@@ -28,11 +28,15 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 type RightChatSectionProps = {
   selectedUser: User | null;
   setSelectedUser: React.Dispatch<SetStateAction<User | null>>;
+  selectedGroup:Group | null;
+  setSelectedGroup:React.Dispatch<SetStateAction<Group | null>>;
 };
 
 const RightChatSection = ({
   selectedUser,
   setSelectedUser,
+  selectedGroup,
+  setSelectedGroup,
 }: RightChatSectionProps) => {
   const [messages, setMessages] = useState<message[]>([]);
   const [message, setMessage] = useState<string>("");

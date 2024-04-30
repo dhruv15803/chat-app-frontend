@@ -27,3 +27,11 @@ export type message = {
     updatedAt:string;
     isForwarded:boolean;
 }
+
+export type Group = {
+    _id:string;
+    groupName:string;
+    participants:User[];
+    messages:message[];
+    owner:string;
+}

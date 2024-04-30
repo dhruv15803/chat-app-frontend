@@ -1,5 +1,5 @@
-import { User } from "@/types";
-import React, { useState } from "react";
+import { Group, User } from "@/types";
+import React, { SetStateAction, useState } from "react";
 import UserCard from "./UserCard";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
@@ -17,12 +17,18 @@ type LeftSideBarProps = {
   users: User[];
   selectedUser: User | null;
   setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>;
+  groups:Group[];
+  selectedGroup:Group | null;
+  setSelectedGroup:React.Dispatch<SetStateAction<Group | null>>;
 };
 
 const LeftSideBar = ({
   users,
   selectedUser,
   setSelectedUser,
+  groups,
+  setSelectedGroup,
+  selectedGroup,
 }: LeftSideBarProps) => {
   const [searchUsername, setSearchUsername] = useState<string>("");
 
