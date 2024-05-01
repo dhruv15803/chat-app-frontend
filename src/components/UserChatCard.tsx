@@ -1,4 +1,4 @@
-import { User, message } from "@/types";
+import {  message } from "@/types";
 import React, { useState } from "react";
 import { IoCaretForward } from "react-icons/io5";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";

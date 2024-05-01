@@ -1,14 +1,13 @@
-import { GlobalContext, backendUrl } from "@/App";
+import { backendUrl } from "@/App";
 import LeftSideBar from "@/components/LeftSideBar";
 import RightChatSection from "@/components/RightChatSection";
-import { GlobalContextType, Group, User } from "@/types";
+import {  Group, User } from "@/types";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
-  const { loggedInUser } = useContext(GlobalContext) as GlobalContextType;
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [isShowUsers, setIsShowUsers] = useState(true);

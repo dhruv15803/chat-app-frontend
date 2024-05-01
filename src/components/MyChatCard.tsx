@@ -1,9 +1,6 @@
-import { User, message } from "@/types";
+import { message } from "@/types";
 import { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
 import EditDialog from "./EditDialog";
 import MessageDropDown from "./MessageDropDown";
 

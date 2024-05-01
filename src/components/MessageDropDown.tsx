@@ -1,15 +1,7 @@
-import React, { SetStateAction } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+import React from "react";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
-import { User, message } from "@/types";
+import { message } from "@/types";
 import { Sheet, SheetTrigger } from "./ui/sheet";
 import ForwardMessageSheet from "./ForwardMessageSheet";
 

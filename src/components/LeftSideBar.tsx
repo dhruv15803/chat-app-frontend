@@ -3,14 +3,7 @@ import React, { SetStateAction, useState } from "react";
 import UserCard from "./UserCard";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+import { Sheet,SheetTrigger } from "./ui/sheet";
 import CreateGroupSheet from "./CreateGroupSheet";
 import GroupCard from "./GroupCard";
 

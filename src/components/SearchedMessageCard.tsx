@@ -1,5 +1,4 @@
 import { message } from "@/types";
-import React from "react";
 import { SheetClose } from "./ui/sheet";
 
 type SearchedMessageCardProps = {

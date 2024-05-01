@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { SheetClose, SheetContent, SheetFooter, SheetHeader } from "./ui/sheet";
+import { useEffect, useState } from "react";
+import { SheetContent, SheetFooter, SheetHeader } from "./ui/sheet";
 import { User } from "@/types";
 import GroupUserCard from "./GroupUserCard";
 import { Button } from "./ui/button";
@@ -27,7 +27,7 @@ const CreateGroupSheet = () => {
 
   const createGroup = async () => {
     try {
-        const response = await axios.post(`${backendUrl}/api/group/create`,{
+        await axios.post(`${backendUrl}/api/group/create`,{
             groupName,
             groupUsers,
         },{withCredentials:true});
@@ -41,7 +41,7 @@ const CreateGroupSheet = () => {
   useEffect(() => {
     getAllUsers();
   }, []);
-  
+
   return (
     <>
       <SheetContent>

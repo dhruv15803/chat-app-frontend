@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { SheetContent, SheetFooter, SheetHeader } from "./ui/sheet";
 import { User, message } from "@/types";
-import UserCard from "./UserCard";
 import ForwardUserCard from "./ForwardUserCard";
 import { backendUrl } from "@/App";
 import axios from "axios";

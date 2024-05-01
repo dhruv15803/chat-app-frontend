@@ -9,8 +9,6 @@ import { Button } from "./ui/button";
 import { GlobalContextType, Group, User, message } from "@/types";
 import axios from "axios";
 import { GlobalContext, backendUrl } from "@/App";
-import { RxAvatar } from "react-icons/rx";
-import { IoIosArrowDown } from "react-icons/io";
 import MyChatCard from "./MyChatCard";
 import UserChatCard from "./UserChatCard";
 import { CiSearch } from "react-icons/ci";
@@ -36,9 +34,6 @@ type RightChatSectionProps = {
 const RightChatSection = ({
   selectedUser,
   setSelectedUser,
-  selectedGroup,
-  setSelectedGroup,
-  isShowUsers,
 }: RightChatSectionProps) => {
   const [messages, setMessages] = useState<message[]>([]);
   const [message, setMessage] = useState<string>("");
@@ -48,6 +43,8 @@ const RightChatSection = ({
   const [searchedMessageId, setSearchedMessageId] = useState<string>("");
   const latestMessageRef = useRef<HTMLDivElement>(null);
   const previousMessagesLength = useRef(0);
+
+  console.log(noMessagesMsg);
 
   const getConversation = async () => {
     try {
@@ -167,7 +164,7 @@ const RightChatSection = ({
 
   const clearChat = async () => {
     try {
-      const response = await axios.delete(`${backendUrl}/api/message/clearChat/${selectedUser?._id}`,{
+      await axios.delete(`${backendUrl}/api/message/clearChat/${selectedUser?._id}`,{
         withCredentials:true,
       })
       setMessages([]);

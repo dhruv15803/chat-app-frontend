@@ -91,6 +91,7 @@ const SearchMessageSheet = ({
     return `${day}/${month}/${year}`;
   };
 
+  console.log(date);
 
   useEffect(() => {
     if (date === null) return;
