@@ -29,10 +29,10 @@ const SearchMessageSheet = ({
 }: SearchMessageSheetProps) => {
   const [searchMessage, setSearchMessage] = useState<string>("");
   const [filteredMessages, setFilteredMessages] = useState<message[]>([]);
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState<Date>();
 
   const searchConversationForMessage = () => {
-    setDate(null);
+    setDate(undefined);
     let filtered = [];
     if (searchMessage.length <= 1) {
       setFilteredMessages([]);
@@ -57,10 +57,7 @@ const SearchMessageSheet = ({
 
   const filterByDate = () => {
     setSearchMessage("");
-    if (date === null || date===undefined) {
-      setDate(null);
-      return;
-    }
+    if(date===undefined) return;
     let filtered = [];
     const day = date?.getDate();
     const month = date?.getMonth() + 1;
@@ -76,8 +73,7 @@ const SearchMessageSheet = ({
 
   const convertToDateFromDate = (date: Date)=> {
     if(date===undefined) {
-      setDate(null);
-      return null;
+      return;
     }
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -89,12 +85,18 @@ const SearchMessageSheet = ({
   console.log(date);
 
   useEffect(() => {
-    if (date === null) return;
+    if (date === undefined) {
+      setFilteredMessages([]);
+      return
+    };
     filterByDate();
   }, [date]);
 
   useEffect(() => {
-    if (searchMessage.trim() === "") return;
+    if (searchMessage.trim() === "") {
+      setFilteredMessages([]);
+      return
+    };
     searchConversationForMessage();
   }, [searchMessage]);
 
@@ -136,19 +138,15 @@ const SearchMessageSheet = ({
             id="searchMessage"
           />
         </div>
-        {filteredMessages.length === 0 && searchMessage.trim() !== "" && (
-          <div className="">No messages found</div>
-        )}
-        {filteredMessages.length === 0 && date !== null && date!==undefined && (
-          <>
-            <div>No messages found on {convertToDateFromDate(date)}</div>
-          </>
-        )}
-        {filteredMessages.length === 0 &&
-          searchMessage.trim() === "" &&
-          date === null && (
-            <div>Search for messages with {selectedUser?.username}</div>
-          )}
+        {searchMessage.trim().length < 2 && date===undefined && filteredMessages.length===0 && <>
+        <div>Search messages with {selectedUser.username}</div>
+        </>}
+        {searchMessage.trim()==="" && date!==undefined && filteredMessages.length===0 && <>
+        <div>No messages found on {convertToDateFromDate(date)}</div>
+        </>}
+        {date===undefined && searchMessage.trim().length >=2 && filteredMessages.length===0 && <>
+        <div>No messages found with {searchMessage.trim()}</div>
+        </>}
         {filteredMessages?.map((message) => {
           return (
             <SearchedMessageCard
