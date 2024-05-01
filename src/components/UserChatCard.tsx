@@ -12,7 +12,7 @@ type UserChatCardProps = {
   searchedMessageId: string;
   searchedMessageRef: React.RefObject<HTMLDivElement>;
   isForwarded: boolean;
-  forwardMessage:(message:message,selectForwardUser:User) => Promise<void>;
+  forwardMessage:(message:message,forwardUsers:string[]) => Promise<void>;
 };
 
 const UserChatCard = ({

@@ -15,7 +15,7 @@ type MyChatCardProps = {
   searchedMessageRef:React.RefObject<HTMLDivElement>;
   searchedMessageId:string;
   latestMessageRef:React.RefObject<HTMLDivElement>;
-  forwardMessage:(message:message,selectForwardUser:User) => Promise<void>;
+  forwardMessage:(message:message,forwardUsers:string[]) => Promise<void>;
 };
 
 const MyChatCard = ({

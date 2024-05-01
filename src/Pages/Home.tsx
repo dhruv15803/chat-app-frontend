@@ -11,6 +11,7 @@ const Home = () => {
   const { loggedInUser }: GlobalContextType = useContext(GlobalContext);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
+  const [isShowUsers, setIsShowUsers] = useState(true);
 
   const getAllUsers = async () => {
     try {
@@ -49,6 +50,8 @@ const Home = () => {
     <>
       <div className="border-2 rounded-lg w-[90%] shadow-lg mx-auto my-16 flex h-[700px]">
         <LeftSideBar
+          isShowUsers={isShowUsers}
+          setIsShowUsers={setIsShowUsers}
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
           users={users}
@@ -57,6 +60,7 @@ const Home = () => {
           setSelectedGroup={setSelectedGroup}
         />
         <RightChatSection
+          isShowUsers={isShowUsers}
           selectedUser={selectedUser}
           setSelectedUser={setSelectedUser}
           selectedGroup={selectedGroup}

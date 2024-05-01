@@ -11,12 +11,12 @@ import { Button } from "./ui/button";
 
 type ForwardMessageSheetProps = {
     message:message;
-    forwardMessage:(message:message,selectForwardUser:User) => Promise<void>;
+    forwardMessage:(message:message,forwardUsers:string[]) => Promise<void>;
 }
 
 const ForwardMessageSheet = ({message,forwardMessage}:ForwardMessageSheetProps) => {
   const [users, setUsers] = useState<User[]>([]);
-  const [selectForwardUser, setSelectForwardUser] = useState<null | User>(null);
+  const [forwardUsers,setForwardUsers] = useState<string[]>([]);
 
   const getAllUsers = async () => {
     try {
@@ -45,13 +45,13 @@ const ForwardMessageSheet = ({message,forwardMessage}:ForwardMessageSheetProps) 
             <ForwardUserCard
               key={user._id}
               user={user}
-              selectForwardUser={selectForwardUser}
-              setSelectForwardUser={setSelectForwardUser}
+              forwardUsers={forwardUsers}
+              setForwardUsers={setForwardUsers}
             />
           );
         })}
-        {selectForwardUser!==null && <SheetFooter className="my-4">
-            <Button onClick={() => forwardMessage(message,selectForwardUser)}>Forward</Button>
+        {forwardUsers.length!==0 && <SheetFooter className="my-4">
+            <Button onClick={() => forwardMessage(message,forwardUsers)}>Forward</Button>
         </SheetFooter>}
       </SheetContent>
     </>

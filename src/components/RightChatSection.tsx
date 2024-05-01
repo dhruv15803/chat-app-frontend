@@ -30,6 +30,7 @@ type RightChatSectionProps = {
   setSelectedUser: React.Dispatch<SetStateAction<User | null>>;
   selectedGroup:Group | null;
   setSelectedGroup:React.Dispatch<SetStateAction<Group | null>>;
+  isShowUsers:boolean;
 };
 
 const RightChatSection = ({
@@ -37,6 +38,7 @@ const RightChatSection = ({
   setSelectedUser,
   selectedGroup,
   setSelectedGroup,
+  isShowUsers,
 }: RightChatSectionProps) => {
   const [messages, setMessages] = useState<message[]>([]);
   const [message, setMessage] = useState<string>("");
@@ -143,7 +145,7 @@ const RightChatSection = ({
     }
   };
 
-  const forwardMessage = async (message: message, selectForwardUser: User) => {
+  const forwardMessage = async (message: message, forwardUsers:string[]) => {
     try {
       if (message.message.trim() === "") {
         return;
@@ -152,12 +154,12 @@ const RightChatSection = ({
         `${backendUrl}/api/message/forward`,
         {
           message: message.message,
-          receiverId: selectForwardUser._id,
+          forwardUsers,
         },
         { withCredentials: true }
       );
       console.log(response);
-      setSelectedUser(selectForwardUser);
+      setSelectedUser(response.data.firstForwardedUser);
     } catch (error) {
       console.log(error);
     }

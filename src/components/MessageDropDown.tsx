@@ -19,7 +19,7 @@ type MessageDropDownProps = {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setNewMessage: React.Dispatch<React.SetStateAction<string>>;
   message: message;
-  forwardMessage:(message:message,selectForwardUser:User) => Promise<void>;
+  forwardMessage:(message:message,forwardUsers:string[]) => Promise<void>;
 };
 
 const MessageDropDown = ({
