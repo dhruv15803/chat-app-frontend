@@ -13,7 +13,7 @@ const Register = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
-  const [avatarFile, setAvatarFile] = useState<string | File>("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarUrl,setAvatarUrl] = useState<string>("");
   const [isLoading,setIsLoading] = useState<boolean>(false);
   const [registerErrorMsg,setRegisterErrorMsg] = useState<string>("");
@@ -21,7 +21,7 @@ const Register = () => {
 
   const getAvatarFile = async () => {
     try {
-        if(typeof avatarFile==="string") return;
+        if(avatarFile===null) return;
         // API CALL using axios
         setIsLoading(true);
         const response = await axios.post(`${backendUrl}/api/user/getAvatarUrl`,{
@@ -69,7 +69,7 @@ const Register = () => {
         console.log(response);
         setLoggedInUser(response.data.newUser);
         setIsLoggedIn(true);
-        setAvatarFile("");
+        setAvatarFile(null);
         setAvatarUrl("");
         setEmail("");
         setUsername("");
@@ -157,8 +157,12 @@ const Register = () => {
                 {avatarUrl!=="" ? 'Change avatar' : 'upload avatar'}
             </label>
             {avatarUrl!=="" && <Button onClick={() => {
+                const fileInput = document.getElementById('avatarFile') as HTMLInputElement;
+                if(fileInput) {
+                  fileInput.value="";
+                }
                 setAvatarUrl("");
-                setAvatarFile("");
+                setAvatarFile(null);
             }} className="text-blue-500" variant="ghost">Remove avatar</Button>}
             <input hidden onChange={(e) => setAvatarFile(e.target.files![0])} type="file" name="avatarFile" id="avatarFile" />
           </div>
