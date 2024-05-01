@@ -21,7 +21,7 @@ const Navbar = () => {
     setLoggedInUser,
     isLoggedIn,
     setIsLoggedIn,
-  }: GlobalContextType = useContext(GlobalContext);
+  } = useContext(GlobalContext) as GlobalContextType;
   const navigate = useNavigate();
 
   const logoutUser = async () => {
@@ -30,7 +30,7 @@ const Navbar = () => {
         withCredentials: true,
       });
       console.log(response);
-      setLoggedInUser({});
+      setLoggedInUser(null);
       setIsLoggedIn(false);
     } catch (error) {
       console.log(error);

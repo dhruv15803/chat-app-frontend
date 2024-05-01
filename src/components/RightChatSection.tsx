@@ -42,7 +42,7 @@ const RightChatSection = ({
 }: RightChatSectionProps) => {
   const [messages, setMessages] = useState<message[]>([]);
   const [message, setMessage] = useState<string>("");
-  const { loggedInUser }: GlobalContextType = useContext(GlobalContext);
+  const { loggedInUser } = useContext(GlobalContext) as GlobalContextType;
   const [noMessagesMsg, setNoMessagesMsg] = useState<string>("");
   const searchedMessageRef = useRef<HTMLDivElement>(null);
   const [searchedMessageId, setSearchedMessageId] = useState<string>("");
@@ -80,7 +80,7 @@ const RightChatSection = ({
       const response = await axios.post(
         `${backendUrl}/api/message/create`,
         {
-          senderId: loggedInUser._id,
+          senderId: loggedInUser?._id,
           receiverId: selectedUser?._id,
           message: message,
         },
@@ -267,7 +267,7 @@ const RightChatSection = ({
         </div>
         <div className="flex flex-col gap-4 h-[85%] p-2 border-2 overflow-y-auto">
           {messages?.map((message) => {
-            if (message.senderId === loggedInUser._id) {
+            if (message.senderId === loggedInUser?._id) {
               return (
                 <MyChatCard
                   forwardMessage={forwardMessage}

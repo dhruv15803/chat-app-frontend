@@ -11,7 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
   const [loginErrorMsg,setLoginErrorMsg] = useState<string>(""); 
-  const {setLoggedInUser,setIsLoggedIn}:GlobalContextType = useContext(GlobalContext);
+  const {setLoggedInUser,setIsLoggedIn} = useContext(GlobalContext) as GlobalContextType;
 
 
   const loginUser = async (e:React.FormEvent<HTMLFormElement>) => {

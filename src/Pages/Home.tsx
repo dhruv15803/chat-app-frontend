@@ -8,7 +8,7 @@ import React, { useContext, useEffect, useState } from "react";
 const Home = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
-  const { loggedInUser }: GlobalContextType = useContext(GlobalContext);
+  const { loggedInUser } = useContext(GlobalContext) as GlobalContextType;
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [isShowUsers, setIsShowUsers] = useState(true);

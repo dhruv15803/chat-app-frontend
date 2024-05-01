@@ -12,11 +12,11 @@ export type User = {
 
 
 export type GlobalContextType = {
-    loggedInUser:User;
-    setLoggedInUser:React.Dispatch<React.SetStateAction<{} | User>>;
-    isLoggedIn:boolean;
-    setIsLoggedIn:React.Dispatch<React.SetStateAction<boolean>>;
-}
+    loggedInUser: User | null;
+    setLoggedInUser: React.Dispatch<React.SetStateAction<User | null>>;
+    isLoggedIn: boolean;
+    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  };
 
 export type message = {
     _id:string;

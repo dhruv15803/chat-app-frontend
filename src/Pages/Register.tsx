@@ -17,7 +17,7 @@ const Register = () => {
   const [avatarUrl,setAvatarUrl] = useState<string>("");
   const [isLoading,setIsLoading] = useState<boolean>(false);
   const [registerErrorMsg,setRegisterErrorMsg] = useState<string>("");
-  const {setLoggedInUser,setIsLoggedIn}:GlobalContextType = useContext(GlobalContext);
+  const {setLoggedInUser,setIsLoggedIn} = useContext(GlobalContext) as GlobalContextType;
 
   const getAvatarFile = async () => {
     try {

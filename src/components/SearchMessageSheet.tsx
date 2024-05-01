@@ -62,7 +62,7 @@ const SearchMessageSheet = ({
 
   const filterByDate = () => {
     setSearchMessage("");
-    if (date === null || undefined) {
+    if (date === null || date===undefined) {
       setDate(null);
       return;
     }
@@ -143,7 +143,7 @@ const SearchMessageSheet = ({
         {filteredMessages.length === 0 && searchMessage.trim() !== "" && (
           <div className="">No messages found</div>
         )}
-        {filteredMessages.length === 0 && date !== null && (
+        {filteredMessages.length === 0 && date !== null && date!==undefined && (
           <>
             <div>No messages found on {convertToDateFromDate(date)}</div>
           </>
