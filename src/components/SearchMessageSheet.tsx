@@ -62,13 +62,15 @@ const SearchMessageSheet = ({
 
   const filterByDate = () => {
     setSearchMessage("");
-    if (date === null) return;
+    if (date === null || undefined) {
+      setDate(null);
+      return;
+    }
     let filtered = [];
     const day = date?.getDate();
     const month = date?.getMonth() + 1;
     const year = date?.getFullYear();
     const dateString = `${day}/${month}/${year}`;
-    console.log(dateString);
     for (let i = messages.length - 1; i >= 0; i--) {
       if (convertToDate(messages[i].createdAt) === dateString) {
         filtered.push(messages[i]);
@@ -77,7 +79,11 @@ const SearchMessageSheet = ({
     setFilteredMessages(filtered);
   };
 
-  const convertToDateFromDate = (date: Date): string => {
+  const convertToDateFromDate = (date: Date)=> {
+    if(date===undefined) {
+      setDate(null);
+      return null;
+    }
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();

@@ -19,7 +19,6 @@ const CreateGroupSheet = () => {
       const response = await axios.get(`${backendUrl}/api/user/getAllUsers`, {
         withCredentials: true,
       });
-      console.log(response);
       setUsers(response.data.users);
     } catch (error) {
       console.log(error);
@@ -32,7 +31,6 @@ const CreateGroupSheet = () => {
             groupName,
             groupUsers,
         },{withCredentials:true});
-        console.log(response);
         setGroupName("");
         setGroupUsers([]);
     } catch (error) {
@@ -43,9 +41,7 @@ const CreateGroupSheet = () => {
   useEffect(() => {
     getAllUsers();
   }, []);
-
-  console.log('Group users:_ ',groupUsers);
-
+  
   return (
     <>
       <SheetContent>

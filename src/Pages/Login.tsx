@@ -33,7 +33,11 @@ const Login = () => {
         console.log(response);
         setLoggedInUser(response.data.user);
         setIsLoggedIn(true);
-    } catch (error) {
+    } catch (error:any) {
+        setLoginErrorMsg(error.response.data.message);
+        setTimeout(() => {
+          setLoginErrorMsg("");
+        },4000)
         console.log(error);
     }
   }
@@ -75,6 +79,9 @@ const Login = () => {
               onClick={() => setIsShowPassword(!isShowPassword)}
             />
             <label htmlFor="isShowPassword">show password</label>
+          </div>
+          <div className="text-red-500">
+            {loginErrorMsg}
           </div>
           <div className="flex items-center gap-1">
             <span>Don't have an account?</span>
