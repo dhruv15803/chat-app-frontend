@@ -1,4 +1,4 @@
-import {  message } from "@/types";
+import {  User, message } from "@/types";
 import React, { useState } from "react";
 import { IoCaretForward } from "react-icons/io5";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -13,6 +13,7 @@ type UserChatCardProps = {
   searchedMessageRef: React.RefObject<HTMLDivElement>;
   isForwarded: boolean;
   forwardMessage:(message:message,forwardUsers:string[]) => Promise<void>;
+  selectedUser:User | null;
 };
 
 const UserChatCard = ({
@@ -22,6 +23,7 @@ const UserChatCard = ({
   searchedMessageRef,
   isForwarded,
   forwardMessage,
+  selectedUser,
 }: UserChatCardProps) => {
   const [isArrowShow, setIsArrowShow] = useState<boolean>(false);
   const [isShowDropdown, setIsShowDropdown] = useState<boolean>(false);
@@ -63,7 +65,7 @@ const UserChatCard = ({
           <div className="flex flex-col gap-2 w-[25%]">
             <Sheet>
               <SheetTrigger><Button variant="outline" className="w-full">Forward</Button></SheetTrigger>
-              <ForwardMessageSheet message={message} forwardMessage={forwardMessage}/>
+              <ForwardMessageSheet selectedUser={selectedUser} message={message} forwardMessage={forwardMessage}/>
             </Sheet>
           </div>
           </>}

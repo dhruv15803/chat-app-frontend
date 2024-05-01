@@ -11,9 +11,10 @@ import { Button } from "./ui/button";
 type ForwardMessageSheetProps = {
     message:message;
     forwardMessage:(message:message,forwardUsers:string[]) => Promise<void>;
+    selectedUser:User | null;
 }
 
-const ForwardMessageSheet = ({message,forwardMessage}:ForwardMessageSheetProps) => {
+const ForwardMessageSheet = ({message,forwardMessage,selectedUser}:ForwardMessageSheetProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [forwardUsers,setForwardUsers] = useState<string[]>([]);
 
@@ -40,6 +41,7 @@ const ForwardMessageSheet = ({message,forwardMessage}:ForwardMessageSheetProps) 
         </SheetHeader>
         <Separator/>
         {users?.map((user) => {
+          if(user._id===selectedUser?._id) return <></>;
           return (
             <ForwardUserCard
               key={user._id}

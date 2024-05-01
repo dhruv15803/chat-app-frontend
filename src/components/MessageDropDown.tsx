@@ -1,7 +1,7 @@
 import React from "react";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
-import { message } from "@/types";
+import { User, message } from "@/types";
 import { Sheet, SheetTrigger } from "./ui/sheet";
 import ForwardMessageSheet from "./ForwardMessageSheet";
 
@@ -12,6 +12,7 @@ type MessageDropDownProps = {
   setNewMessage: React.Dispatch<React.SetStateAction<string>>;
   message: message;
   forwardMessage:(message:message,forwardUsers:string[]) => Promise<void>;
+  selectedUser:User | null;
 };
 
 const MessageDropDown = ({
@@ -21,6 +22,7 @@ const MessageDropDown = ({
   setNewMessage,
   message,
   forwardMessage,
+  selectedUser,
 }: MessageDropDownProps) => {
   return (
     <>
@@ -58,7 +60,7 @@ const MessageDropDown = ({
                 Forward
               </Button>
             </SheetTrigger>
-            <ForwardMessageSheet forwardMessage={forwardMessage}  message={message}/>
+            <ForwardMessageSheet selectedUser={selectedUser} forwardMessage={forwardMessage}  message={message}/>
           </Sheet>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { message } from "@/types";
+import { User, message } from "@/types";
 import { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import EditDialog from "./EditDialog";
@@ -13,6 +13,7 @@ type MyChatCardProps = {
   searchedMessageId:string;
   latestMessageRef:React.RefObject<HTMLDivElement>;
   forwardMessage:(message:message,forwardUsers:string[]) => Promise<void>;
+  selectedUser:User | null;
 };
 
 const MyChatCard = ({
@@ -24,6 +25,7 @@ const MyChatCard = ({
   searchedMessageId,
   latestMessageRef,
   forwardMessage,
+  selectedUser,
 }: MyChatCardProps) => {
   const [isArrowShow, setIsArrowShow] = useState<boolean>(false);
   const [isShowDropdown, setIsShowDropdown] = useState<boolean>(false);
@@ -71,6 +73,7 @@ const MyChatCard = ({
             message={message}
             setIsDialogOpen={setIsDialogOpen}
             setNewMessage={setNewMessage}
+            selectedUser={selectedUser}
             />
             </div>
         )}

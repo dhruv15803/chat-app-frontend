@@ -156,7 +156,11 @@ const RightChatSection = ({
         { withCredentials: true }
       );
       console.log(response);
-      setSelectedUser(response.data.firstForwardedUser);
+      if(forwardUsers.includes(selectedUser?._id!)) {
+        setSelectedUser(null);
+      } else {
+        setSelectedUser(response.data.firstForwardedUser);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -267,6 +271,7 @@ const RightChatSection = ({
             if (message.senderId === loggedInUser?._id) {
               return (
                 <MyChatCard
+                  selectedUser={selectedUser}
                   forwardMessage={forwardMessage}
                   latestMessageRef={latestMessageRef}
                   searchedMessageId={searchedMessageId}
@@ -281,6 +286,7 @@ const RightChatSection = ({
             } else {
               return (
                 <UserChatCard
+                  selectedUser={selectedUser}
                   forwardMessage={forwardMessage}
                   isForwarded={message.isForwarded}
                   searchedMessageId={searchedMessageId}
