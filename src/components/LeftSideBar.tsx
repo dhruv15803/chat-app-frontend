@@ -1,5 +1,5 @@
 import { Group, User } from "@/types";
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import UserCard from "./UserCard";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
@@ -29,21 +29,24 @@ const LeftSideBar = ({
 }: LeftSideBarProps) => {
   const [searchUsername, setSearchUsername] = useState<string>("");
   const [searchGroupName,setSearchGroupName] = useState<string>("");
+  const [filteredUsers,setFilteredUsers] = useState<User[]>([]);
 
-  const searchUser = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const searchUser = () => {
     if (searchUsername.trim() === "") {
-      toast.error("Please enter the required field");
+      setFilteredUsers([]);
       return;
     }
-    const user = users.find(
-      (user) => user.username === searchUsername.trim().toLowerCase()
-    );
-    if (!user) {
-      toast.error("User not found");
+    let filtered = [];
+    for(let i=users.length-1;i>=0;i--) {
+      if(users[i].username.includes(searchUsername.trim().toLowerCase())) {
+        filtered.push(users[i]);
+      }
+    }
+
+    if (filtered.length===0) {
       return;
     }
-    setSelectedUser(user!);
+    setFilteredUsers(filtered);
   };
   
   
@@ -61,6 +64,11 @@ const LeftSideBar = ({
     setSelectedGroup(group);
   }
 
+  console.log('Filtered', filteredUsers);
+
+  useEffect(() => {
+    searchUser();
+  },[searchUsername])
 
   return (
     <>
@@ -80,11 +88,11 @@ const LeftSideBar = ({
                 <CreateGroupSheet />
               </Sheet>
             </div>
-            <div className="mt-4 border-b-2 flex items-center justify-center p-4">
-              <form
+            <div className="mt-4 border-b-2 flex items-center justify-center p-4 gap-2">
+              {/* <form
                 onSubmit={(e) => searchUser(e)}
                 className="flex items-center gap-2"
-              >
+              > */}
                 <input
                   value={searchUsername}
                   onChange={(e) => setSearchUsername(e.target.value)}
@@ -94,14 +102,31 @@ const LeftSideBar = ({
                   id="searchUsername"
                   placeholder="Enter username"
                 />
-                <Button
+                {searchUsername.trim()!=="" && <Button onClick={() => {
+                  setFilteredUsers(users);
+                  setSearchUsername("");
+                }}  variant="outline"
+                  className="text-blue-500 border-blue-500 hover:bg-blue-500 hover:text-white hover:duration-300">Clear</Button>}
+                {/* <Button
                   variant="outline"
                   className="text-blue-500 border-blue-500 hover:bg-blue-500 hover:text-white hover:duration-300"
                 >
                   Search
-                </Button>
-              </form>
+                </Button> */}
+              {/* </form> */}
             </div>
+            {filteredUsers.length!==0 ? <>
+            {filteredUsers?.map((user) => {
+               return (
+                <UserCard
+                  key={user._id}
+                  selectedUser={selectedUser!}
+                  setSelectedUser={setSelectedUser}
+                  user={user}
+                />
+              );
+            })}
+            </> : <>
             {users?.map((user) => {
               return (
                 <UserCard
@@ -112,6 +137,7 @@ const LeftSideBar = ({
                 />
               );
             })}
+            </>}
           </>
         ) : (
           <>
