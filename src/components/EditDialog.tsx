@@ -39,7 +39,7 @@ const EditDialog = ({
                 await editMessage(message._id,newMessage);
                 setIsDialogOpen(false);
                 setIsShowDropdown(false);
-            }}>Save changes</Button>
+            }}>Update</Button>
         </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
