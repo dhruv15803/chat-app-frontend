@@ -47,7 +47,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="border-2 rounded-lg w-[90%] shadow-lg mx-auto my-16 flex h-[700px]">
+      <div className=" w-[90%] mx-auto border-2 rounded-lg shadow-lg flex h-[600px] my-14">
         <LeftSideBar
           isShowUsers={isShowUsers}
           setIsShowUsers={setIsShowUsers}

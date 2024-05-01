@@ -8,8 +8,8 @@ import axios from "axios";
 import Home from "./Pages/Home";
 import Loader from "./components/Loader";
 // https://chat-app-backend-7s4m.onrender.com - render
-// http://localhost:5000 - local
-export const backendUrl="https://chat-app-backend-7s4m.onrender.com";
+export const backendUrl="http://localhost:5000";
+// export const backendUrl="https://chat-app-backend-7s4m.onrender.com";
 export const GlobalContext = createContext<GlobalContextType | null>(null);
 
 
